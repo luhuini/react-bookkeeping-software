@@ -1,0 +1,7 @@
+:root:root {
+  --adm-color-primary: rgb(159, 202, 63);
+}
+
+.pink-theme {
+  --adm-color-primary: pink;
+}

@@ -4,6 +4,7 @@ import "./index.css";
 import App from "./App";
 import router from "./router";
 import { RouterProvider, Routes, Route } from "react-router-dom";
+import "./theme.css";
 /* 
 1️⃣ 配置/@，进行路径解析
 
