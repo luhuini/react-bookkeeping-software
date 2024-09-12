@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 /* 
-第一件事情：配置/@，进行路径解析
+1️⃣ 配置/@，进行路径解析
 
 -路径解析
   -安装craco，安装到开发环境
@@ -19,6 +19,13 @@ import App from "./App";
   -步骤
     根目录下新增配置文件 jsonfig.json
     添加路径提示配置
-    */
+
+2️⃣ mock数据
+json- server
+-安装：npm i -D json-server
+-准备mock数据json文件夹
+-添加启动命令： start : "server":"json-server ./server/data.json --port8888"
+-访问接口进行测试
+*/
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(<App />);
