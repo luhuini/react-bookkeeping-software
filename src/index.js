@@ -2,6 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
+import router from "./router";
+import { RouterProvider, Routes, Route } from "react-router-dom";
 /* 
 1️⃣ 配置/@，进行路径解析
 
@@ -28,4 +30,4 @@ json- server
 -访问接口进行测试
 */
 const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(<App />);
+root.render(<RouterProvider router={router} />);
