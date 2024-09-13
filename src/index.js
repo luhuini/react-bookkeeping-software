@@ -5,6 +5,8 @@ import App from "./App";
 import router from "./router";
 import { RouterProvider, Routes, Route } from "react-router-dom";
 import "./theme.css";
+import store from "@/store";
+import { Provider } from "react-redux";
 /* 
 1️⃣ 配置/@，进行路径解析
 
@@ -31,4 +33,8 @@ json- server
 -访问接口进行测试
 */
 const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(<RouterProvider router={router} />);
+root.render(
+  <Provider store={store}>
+    <RouterProvider router={router} />
+  </Provider>
+);
