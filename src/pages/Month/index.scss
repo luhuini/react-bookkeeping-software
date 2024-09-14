@@ -1,3 +1,7 @@
+* {
+  // touch-action用于指定某个给定的区域是否允许用户操作，以及如何响应用户操作（比如浏览器自带的划动、缩放等）
+  touch-action: pan-y;
+}
 .monthlyBill {
   --ka-text-color: #191d26;
   height: 100%;

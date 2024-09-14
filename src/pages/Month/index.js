@@ -1,13 +1,36 @@
 import { NavBar, DatePicker } from "antd-mobile";
 import "./index.scss";
-import { useState } from "react";
-import classNames from "classnames";
+import { useState, useMemo } from "react";
+import dayjs from "dayjs";
+import { useSelector } from "react-redux";
+import _ from "loadsh";
 const Month = () => {
-  //open or close date selector
+  //1. open or close date selector
   const [visibleDate, setVisibleDate] = useState(false);
-  const onConfirm = () => {
+  // 2.format time state
+  const [time, setTime] = useState(() => {
+    return dayjs().format("YYYY-MM");
+  });
+
+  const onConfirm = (date) => {
     setVisibleDate(false);
+    setTime(dayjs(date).format("YYYY-MM"));
   };
+  /* 
+  3.bill data groupd by month
+    -get data from store
+    -useMemo  secondary process of dataset, also need a dependent
+    -group data -lodash _.groupBy
+    -format date - dayjs
+  */
+  const { billList } = useSelector((state) => state.bill);
+  // Group bills by month
+  const monthGroupBill = useMemo(() => {
+    // return 出计算后的值
+    return _.groupBy(billList, (item) => dayjs(item.date).format("YYYY-MM"));
+  }, [billList]);
+  console.log(monthGroupBill, 11);
+
   return (
     <div className="monthlyBill">
       <NavBar className="nav" backArrow={false}>
@@ -22,7 +45,7 @@ const Month = () => {
               setVisibleDate(true);
             }}
           >
-            <span className="text">月账单</span>
+            <span className="text">{time}月账单</span>
             <span className={visibleDate ? "arrow" : "arrow expand"}></span>
           </div>
           {/* 统计区域 */}
