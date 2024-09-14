@@ -4,6 +4,7 @@ import { useState, useMemo, useEffect } from "react";
 import dayjs from "dayjs";
 import { useSelector } from "react-redux";
 import _ from "lodash";
+import DailyBill from "./components/DayBill";
 const Month = () => {
   //1. open or close date selector
   const [visibleDate, setVisibleDate] = useState(false);
@@ -26,7 +27,7 @@ const Month = () => {
 	    •	formatTime 是一个变量，其值是格式化后的日期字符串（例如 "2024-09"）。
 	    •	monthGroupBill[formatTime] 表示访问 monthGroupBill 对象中键为 formatTime 的属性值。这种方式允许你使用变量来动态地访问对象的属性。
     */
-    const list = BillGrouping[formatTime] || [];
+    const list = monthBillGrouping[formatTime] || [];
     setGroupMonthBillList(list);
   };
 
@@ -39,7 +40,7 @@ const Month = () => {
   */
   const { billList } = useSelector((state) => state.bill);
   // Group bills by month 将账单按月分组
-  const BillGrouping = useMemo(() => {
+  const monthBillGrouping = useMemo(() => {
     // return 出计算后的值
     return _.groupBy(billList, (item) => dayjs(item.date).format("YYYY-MM"));
   }, [billList]);
@@ -82,10 +83,32 @@ const Month = () => {
   useEffect(() => {
     const date = dayjs().format("YYYY-MM");
     // 边界值控制
-    if (BillGrouping && typeof BillGrouping === "object") {
-      setGroupMonthBillList(BillGrouping[date] || []);
+    if (monthBillGrouping && typeof monthBillGrouping === "object") {
+      setGroupMonthBillList(monthBillGrouping[date] || []);
     }
-  }, [BillGrouping]);
+  }, [monthBillGrouping]);
+
+  /* 6.daily bill group
+    -depends on month bill group get daily data
+    -get object data key, a array
+    -map
+    -component calculate and manage data
+    */
+  const dailyBillGrouping = useMemo(() => {
+    const dailyObj = _.groupBy(groupMonthBillList, (item) =>
+      dayjs(item.date).format("YYYY-MM-DD")
+    );
+    const dailyKeys = Object.keys(dailyObj);
+    console.log(dailyKeys, "dailyKeys");
+    console.log(dailyObj, "dailyObj");
+
+    // return 出计算后的值
+    return {
+      dailyObj,
+      dailyKeys,
+    };
+  }, [groupMonthBillList]);
+
   return (
     <div className="monthlyBill">
       <NavBar className="nav" backArrow={false}>
@@ -141,7 +164,15 @@ const Month = () => {
           />
         </div>
         {/* 单日列表统计 */}
-        {100}
+        {dailyBillGrouping.dailyKeys.map((dailyKey, index) => {
+          return (
+            <DailyBill
+              key={index}
+              dailyKey={dailyKey}
+              dailyBillList={dailyBillGrouping.dailyObj[dailyKey]}
+            />
+          );
+        })}
       </div>
     </div>
   );
