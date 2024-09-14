@@ -1,6 +1,6 @@
 import { NavBar, DatePicker } from "antd-mobile";
 import "./index.scss";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import dayjs from "dayjs";
 import { useSelector } from "react-redux";
 import _ from "lodash";
@@ -19,34 +19,17 @@ const Month = () => {
     const formatTime = dayjs(date).format("YYYY-MM");
     setTime(formatTime);
     // 4.2 click comfirm button, get current month
-    // use the date as key, find the match month group (lodash)
+    // use the date as key, find the match month group (monthGroupBill)
     // Ensure that monthGroupBill[formatTime] is an array
-    const list = monthGroupBill[formatTime] || [];
+    /* 
+    	monthGroupBill 是一个对象，它的属性是月份字符串，值是该月份的账单列表。
+	    •	formatTime 是一个变量，其值是格式化后的日期字符串（例如 "2024-09"）。
+	    •	monthGroupBill[formatTime] 表示访问 monthGroupBill 对象中键为 formatTime 的属性值。这种方式允许你使用变量来动态地访问对象的属性。
+    */
+    const list = BillGrouping[formatTime] || [];
     setGroupMonthBillList(list);
   };
-  // 4.3 calculate useMemo
-  const monthGroupResult = useMemo(() => {
-    // set up default value
-    if (!Array.isArray(groupMonthBillList)) {
-      console.error("groupMonthBillList is not an array:", groupMonthBillList);
-      return {
-        pay: 0,
-        income: 0,
-        balance: 0,
-      };
-    }
-    const pay = groupMonthBillList
-      .filter((item) => item.type === "pay")
-      .reduce((a, c) => a + c.money, 0);
-    const income = groupMonthBillList
-      .filter((item) => item.type === "income")
-      .reduce((a, c) => a + c.money, 0);
-    return {
-      pay,
-      income,
-      balance: pay + income,
-    };
-  }, [groupMonthBillList]);
+
   /* 
   3.bill data groupd by month
     -get data from store
@@ -55,8 +38,8 @@ const Month = () => {
     -format date - dayjs
   */
   const { billList } = useSelector((state) => state.bill);
-  // Group bills by month
-  const monthGroupBill = useMemo(() => {
+  // Group bills by month 将账单按月分组
+  const BillGrouping = useMemo(() => {
     // return 出计算后的值
     return _.groupBy(billList, (item) => dayjs(item.date).format("YYYY-MM"));
   }, [billList]);
@@ -69,6 +52,40 @@ const Month = () => {
     -calculate useMemo
     -render
   */
+  // 4.3 calculate useMemo
+  const monthGroupResult = useMemo(() => {
+    if (!Array.isArray(groupMonthBillList)) {
+      console.error("groupMonthBillList is not an array:", groupMonthBillList);
+      return {
+        totalPay: 0,
+        totalIncome: 0,
+        balance: 0,
+      };
+    }
+
+    const totalPay = groupMonthBillList
+      .filter((item) => item.type === "pay")
+      .reduce((a, c) => a + c.money, 0);
+
+    const totalIncome = groupMonthBillList
+      .filter((item) => item.type === "income")
+      .reduce((a, c) => a + c.money, 0);
+    return {
+      totalPay,
+      totalIncome,
+      balance: totalPay + totalIncome,
+    };
+  }, [groupMonthBillList]);
+
+  /* 5.inital month data
+   */
+  useEffect(() => {
+    const date = dayjs().format("YYYY-MM");
+    // 边界值控制
+    if (BillGrouping && typeof BillGrouping === "object") {
+      setGroupMonthBillList(BillGrouping[date] || []);
+    }
+  }, [BillGrouping]);
   return (
     <div className="monthlyBill">
       <NavBar className="nav" backArrow={false}>
@@ -89,12 +106,14 @@ const Month = () => {
           {/* 统计区域 */}
           <div className="twoLineOverview">
             <div className="item">
-              <span className="money">{monthGroupResult.pay.toFixed(2)}</span>
+              <span className="money">
+                {monthGroupResult.totalPay.toFixed(2)}
+              </span>
               <span className="type">支出</span>
             </div>
             <div className="item">
               <span className="money">
-                {monthGroupResult.income.toFixed(2)}
+                {monthGroupResult.totalIncome.toFixed(2)}
               </span>
               <span className="type">收入</span>
             </div>
