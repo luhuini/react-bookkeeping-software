@@ -30,8 +30,8 @@ const Month = () => {
     if (!Array.isArray(groupMonthBillList)) {
       console.error("groupMonthBillList is not an array:", groupMonthBillList);
       return {
-        totalPay: 0,
-        totalReceive: 0,
+        pay: 0,
+        income: 0,
         balance: 0,
       };
     }
@@ -44,7 +44,7 @@ const Month = () => {
     return {
       pay,
       income,
-      total: pay + income,
+      balance: pay + income,
     };
   }, [groupMonthBillList]);
   /* 
@@ -99,7 +99,9 @@ const Month = () => {
               <span className="type">收入</span>
             </div>
             <div className="item">
-              <span className="money">{monthGroupResult.total.toFixed(2)}</span>
+              <span className="money">
+                {monthGroupResult.balance.toFixed(2)}
+              </span>
               <span className="type">结余</span>
             </div>
           </div>
