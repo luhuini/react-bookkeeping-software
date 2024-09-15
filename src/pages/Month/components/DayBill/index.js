@@ -1,8 +1,10 @@
 import classNames from "classnames";
 import "./index.scss";
-import { React, useMemo } from "react";
+import { React, useMemo, useState } from "react";
+import { billTypeToName } from "@/contants/index.js";
 
 const DailyBill = ({ dailyKey, dailyBillList }) => {
+  const [visible, setVisible] = useState(false);
   const dailyBillResult = useMemo(() => {
     if (!Array.isArray(dailyBillList)) {
       console.error("groupMonthBillList is not an array:", dailyBillList);
@@ -28,11 +30,16 @@ const DailyBill = ({ dailyKey, dailyBillList }) => {
   }, [dailyBillList]);
   return (
     <div className={classNames("dailyBill")}>
-      <div className="header">
+      <div
+        className="header"
+        onClick={() => {
+          setVisible(!visible);
+        }}
+      >
         <div className="dateIcon">
           <span className="date">{dailyKey}</span>
           {/* expand 有这个类名 展开的箭头朝上的样子 */}
-          <span className={classNames("arrow", "expand")}></span>
+          <span className={visible ? "arrow expand" : "arrow"}></span>
         </div>
         <div className="oneLineOverview">
           <div className="pay">
@@ -52,6 +59,22 @@ const DailyBill = ({ dailyKey, dailyBillList }) => {
         </div>
       </div>
       {/* 单日列表 */}
+      {/* 单日列表 */}
+      <div className="billList" style={{ display: visible ? "block" : "none" }}>
+        {dailyBillList.map((item) => {
+          return (
+            <div className="bill" key={item.id}>
+              {/* 图标 */}
+              <div className="detail">
+                <div className="billType">{billTypeToName[item.useFor]}</div>
+              </div>
+              <div className={classNames("money", item.type)}>
+                {item.money.toFixed(2)}
+              </div>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };
