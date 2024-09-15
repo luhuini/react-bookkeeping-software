@@ -2,7 +2,14 @@ import classNames from "classnames";
 import "./index.scss";
 import { React, useMemo, useState } from "react";
 import { billTypeToName } from "@/contants/index.js";
+import Icon from "@/components/Icon/Icon";
 
+/* 
+图标组件
+1.封装一个图标组件
+2.将图案类型作为props传递给组件，生成图标地址
+3.展示
+*/
 const DailyBill = ({ dailyKey, dailyBillList }) => {
   const [visible, setVisible] = useState(false);
   const dailyBillResult = useMemo(() => {
@@ -65,6 +72,7 @@ const DailyBill = ({ dailyKey, dailyBillList }) => {
           return (
             <div className="bill" key={item.id}>
               {/* 图标 */}
+              <Icon type={item.useFor} />
               <div className="detail">
                 <div className="billType">{billTypeToName[item.useFor]}</div>
               </div>
