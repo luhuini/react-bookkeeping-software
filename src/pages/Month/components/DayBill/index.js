@@ -2,7 +2,7 @@ import classNames from "classnames";
 import "./index.scss";
 import { React, useMemo, useState } from "react";
 import { billTypeToName } from "@/contants/index.js";
-import Icon from "@/components/Icon/Icon";
+import Icon from "@/components/Icon";
 
 /* 
 图标组件
