@@ -99,39 +99,31 @@
       "id": "21"
     },
     {
-      "id": "dcd0",
+      "id": "93d1",
       "type": "pay",
-      "money": -4230,
-      "time": "2024-09-16T21:11:25.336Z",
-      "useFor": "promote"
+      "money": -20,
+      "useFor": "drinks"
     },
     {
-      "id": "cab3",
+      "id": "27a1",
       "type": "pay",
       "money": -30,
-      "time": "2024-09-16T21:11:52.088Z",
-      "useFor": "game"
+      "date": "2024-09-14T23:00:00.000Z",
+      "useFor": ""
     },
     {
-      "id": "1eab",
+      "id": "74a0",
       "type": "pay",
-      "money": -30,
-      "time": "2024-09-16T21:12:05.104Z",
-      "useFor": "audio"
+      "money": -1,
+      "date": "2024-09-12T23:00:00.000Z",
+      "useFor": "longdistance"
     },
     {
-      "id": "64bd",
+      "id": "efde",
       "type": "pay",
-      "money": -27,
-      "time": "2024-09-16T21:12:18.917Z",
-      "useFor": "game"
-    },
-    {
-      "id": "1446",
-      "type": "pay",
-      "money": -27,
-      "time": "2024-09-16T21:12:43.641Z",
-      "useFor": "audio"
+      "money": -50,
+      "date": "2024-09-09T23:00:00.000Z",
+      "useFor": "dessert"
     }
   ]
 }
